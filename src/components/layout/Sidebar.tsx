@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { 
   Home, 
@@ -6,7 +5,8 @@ import {
   Users, 
   Award, 
   Building2,
-  Network
+  Network,
+  MessageCircle
 } from "lucide-react";
 
 interface SidebarProps {
@@ -21,6 +21,7 @@ export const Sidebar = ({ currentPage, onPageChange }: SidebarProps) => {
     { id: "network", label: "Network", icon: Users },
     { id: "credentials", label: "ProofCards", icon: Award },
     { id: "companies", label: "Companies", icon: Building2 },
+    { id: "chat", label: "Messages", icon: MessageCircle },
   ];
 
   return (

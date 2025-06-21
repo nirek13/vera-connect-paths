@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { Search, MessageCircle, User } from "lucide-react";
 
 interface ConnectionsListProps {
@@ -16,6 +16,7 @@ export const ConnectionsList = ({ profile }: ConnectionsListProps) => {
   const [connections, setConnections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchConnections = async () => {
@@ -49,6 +50,28 @@ export const ConnectionsList = ({ profile }: ConnectionsListProps) => {
     conn.connection_profile?.last_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     conn.connection_profile?.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleStartChat = async (connectionProfile: any) => {
+    try {
+      const { data, error } = await supabase.rpc('get_or_create_conversation', {
+        user1_id: profile.id,
+        user2_id: connectionProfile.id
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Chat started!",
+        description: `You can now message ${connectionProfile.first_name} ${connectionProfile.last_name}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to start chat",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (loading) {
     return <div className="text-center py-8">Loading connections...</div>;
@@ -125,7 +148,11 @@ export const ConnectionsList = ({ profile }: ConnectionsListProps) => {
                   </div>
                 )}
                 <div className="flex space-x-2">
-                  <Button size="sm" className="flex-1">
+                  <Button 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleStartChat(connection.connection_profile)}
+                  >
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Message
                   </Button>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +8,7 @@ import { ProfilePage } from "@/components/profile/ProfilePage";
 import { NetworkPage } from "@/components/network/NetworkPage";
 import { CredentialsPage } from "@/components/credentials/CredentialsPage";
 import { CompaniesPage } from "@/components/companies/CompaniesPage";
+import { ChatPage } from "@/components/chat/ChatPage";
 
 interface MainAppProps {
   session: Session;
@@ -55,6 +55,7 @@ export const MainApp = ({ session }: MainAppProps) => {
           {currentPage === "network" && <NetworkPage profile={profile} />}
           {currentPage === "credentials" && <CredentialsPage profile={profile} />}
           {currentPage === "companies" && <CompaniesPage profile={profile} />}
+          {currentPage === "chat" && <ChatPage profile={profile} />}
         </main>
       </div>
     </div>
