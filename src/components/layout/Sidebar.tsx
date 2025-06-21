@@ -28,8 +28,8 @@ export const Sidebar = ({ currentPage, onPageChange }: SidebarProps) => {
     <div className="w-64 bg-white shadow-lg flex flex-col">
       <div className="p-6 border-b">
         <div className="flex items-center space-x-2">
-          <Network className="h-8 w-8 text-blue-600" />
-          <h1 className="text-2xl font-bold text-blue-600">Vera</h1>
+          
+          <h1 className="text-2xl font-bold text-primary-600">Vera</h1>
         </div>
       </div>
       <nav className="flex-1 p-4">
