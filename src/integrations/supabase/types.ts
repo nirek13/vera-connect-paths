@@ -9,16 +9,208 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      connections: {
+        Row: {
+          addressee_id: string | null
+          connection_type: string | null
+          created_at: string | null
+          id: string
+          requester_id: string | null
+          status: Database["public"]["Enums"]["connection_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          addressee_id?: string | null
+          connection_type?: string | null
+          created_at?: string | null
+          id?: string
+          requester_id?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          addressee_id?: string | null
+          connection_type?: string | null
+          created_at?: string | null
+          id?: string
+          requester_id?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connections_addressee_id_fkey"
+            columns: ["addressee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connections_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credentials: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          description: string | null
+          expiration_date: string | null
+          id: string
+          issued_date: string | null
+          issuer_id: string | null
+          metadata: Json | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          expiration_date?: string | null
+          id?: string
+          issued_date?: string | null
+          issuer_id?: string | null
+          metadata?: Json | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          expiration_date?: string | null
+          id?: string
+          issued_date?: string | null
+          issuer_id?: string | null
+          metadata?: Json | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credentials_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credentials_issuer_id_fkey"
+            columns: ["issuer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credentials_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          education: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          skills: string[] | null
+          title: string | null
+          updated_at: string | null
+          user_type: Database["public"]["Enums"]["user_type"]
+          work_history: Json | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          education?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          skills?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+          work_history?: Json | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          education?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          skills?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+          work_history?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      find_connection_path: {
+        Args: { start_user_id: string; target_user_id: string }
+        Returns: {
+          path_length: number
+          path_users: string[]
+        }[]
+      }
     }
     Enums: {
-      [_ in never]: never
+      connection_status: "pending" | "accepted" | "declined"
+      user_type: "recruiter" | "company" | "professional"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +325,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      connection_status: ["pending", "accepted", "declined"],
+      user_type: ["recruiter", "company", "professional"],
+    },
   },
 } as const
